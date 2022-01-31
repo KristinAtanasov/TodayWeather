@@ -5,7 +5,7 @@
 </br>
 
 
-### This is weather app allowing you to check the weather based on your current location.
+### This is a weather app allowing you to check the weather based on your current location.
 
 </br>
 
