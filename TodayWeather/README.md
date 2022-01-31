@@ -1,7 +1,9 @@
 # Today weather app
 
 </br>
-</br>
+
+[![Swift](https://img.shields.io/badge/Swift-5.0-orange.svg?style=flat)](https://swift.org/)
+
 </br>
 
 
