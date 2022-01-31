@@ -3,7 +3,7 @@ import UIKit
 class CitiesWeathersListVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var cellIdentifier = "newsCell"
-    
+
     var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -19,25 +19,55 @@ class CitiesWeathersListVC: UIViewController, UITableViewDelegate, UITableViewDa
     
     var cityLocation = ""
     var weeklyTemperature = [WeeklyWeather]()
+    var spinerView = UIActivityIndicatorView(style: .large)
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationItem.title = "Weather App"
-        
         convigureViewsLayout()
-        configureTableView()
-        self.activityIndicator.startAnimating()
-        NetworkController.shared.fetchWeather(cityName: cityLocation) { (result) in
-            switch result{
-            case .success(let weeklyWeather):
-                self.updateUI(weeklyTemperature: weeklyWeather)
-            case .failure(let error):
-                self.displayError(error: error, title: "Please check you network connection.")
-            }
-        }
-        self.activityIndicator.stopAnimating()
+        
+        
+        
+//        NetworkController.shared.fetchWeather(cityName: cityLocation) { (result) in
+//            switch result{
+//            case .success(let weeklyWeather):
+//                DispatchQueue.main.async {
+//                    self.updateUI(weeklyTemperature: weeklyWeather)
+//                }
+//            case .failure(let error):
+//                self.displayError(error: error, title: "Please check you network connection.")
+//            }
+//        }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+           super.viewWillAppear(animated)
+        configureTableView()
+        
+        var activityIndicatorView = UIActivityIndicatorView()
+        tableView.backgroundView = activityIndicatorView
+        activityIndicatorView.startAnimating()
+        
+            OperationQueue.main.addOperation() {
+                activityIndicatorView.stopAnimating()
+                NetworkController.shared.fetchWeather(cityName: self.cityLocation) { (result) in
+                    switch result{
+                    case .success(let weeklyWeather):
+                        DispatchQueue.main.async {
+                            self.updateUI(weeklyTemperature: weeklyWeather)
+                        }
+                    case .failure(let error):
+                        self.displayError(error: error, title: "Please check you network connection.")
+                    }
+                }
+                       
+
+                self.tableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
+                       self.tableView.reloadData()
+                   }
+           }
     
     
     func updateUI(weeklyTemperature: [WeeklyWeather]){
@@ -54,15 +84,29 @@ class CitiesWeathersListVC: UIViewController, UITableViewDelegate, UITableViewDa
             self.present(alert, animated: true, completion: nil)
         }
     }
+    
+//    func showSpinner(){
+//        view.backgroundColor = UIColor(white: 0, alpha: 0.7)
+//
+//        spinerView.translatesAutoresizingMaskIntoConstraints = false
+//        spinerView.startAnimating()
+//        view.addSubview(spinerView)
+//
+//        spinerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+//        spinerView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+//    }
+//    func removeSpinner(){
+//        spinerView.removeFromSuperview()
+//    }
 }
-
-
 
 extension CitiesWeathersListVC{
     //MARK: - TableView Datasourse and Delegate methods
     private func configureTableView(){
+        
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
         tableView.register(WeatherCell.self, forCellReuseIdentifier: cellIdentifier)
     }
     
@@ -77,23 +121,23 @@ extension CitiesWeathersListVC{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! WeatherCell
         
-        let weatherModel = weeklyTemperature[indexPath.row]
+        var weatherModel = weeklyTemperature[indexPath.row]
         
         configureCellColors(cell: cell)
-       // cell.containerView.backgroundColor = UIColor(displayP3Red: 73/255, green: 128/255, blue: 156/255, alpha: 1.0)
-        cell.cellImageView.image = UIImage(named: weatherModel.icon )
+        
+        cell.gradusLabel.text = String("\(weatherModel.temp) °")
+        cell.weekDayLabel.text = weatherModel.dayOfTheWeek
+        cell.cellImageView.image = UIImage(named: weatherModel.icon)
         cell.titleLabel.text = weatherModel.conditions
-        cell.descriptionLabel.text = weatherModel.description
+        cell.cityNameLabel.text = cityLocation
         
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 130
+        return 100
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // let cellData = WeatherModel.mockData[indexPath.row]
-        //   print(cellData)
         let cell = tableView.cellForRow(at: indexPath)
         
         UIView.animate(withDuration: 0.5,
@@ -108,12 +152,9 @@ extension CitiesWeathersListVC{
                            })
         }
     }
-    
-    
     func configureCellColors(cell: UITableViewCell) -> UITableViewCell{
         cell.layer.borderWidth = 3
         cell.layer.borderColor = CGColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
-        //cell.layer.backgroundColor = CGColor(red: 255/255, green: 255/255, blue: 246/255, alpha: 1)
         cell.selectionStyle = .none
         return cell
     }

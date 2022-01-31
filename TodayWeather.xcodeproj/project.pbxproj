@@ -69,8 +69,27 @@
 		0219ED3C279C185C006C0B0C /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				02AA350C27995EFA009D5CE3 /* WeatherCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		021A279027A7CF8C00EF4F48 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				0269E571278C98D000E56295 /* CitiesWeathersListVC.swift */,
+				02975118279C26F0000938F2 /* NetworkController.swift */,
+				0219ED2F279B229F006C0B0C /* HomeScreenVC.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		021A279127A7D00100EF4F48 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				022FDBEC279F0E740090B89E /* LocationManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		0269E561278C98D000E56295 = {
@@ -94,17 +113,14 @@
 			children = (
 				0269E56D278C98D000E56295 /* AppDelegate.swift */,
 				0269E56F278C98D000E56295 /* SceneDelegate.swift */,
-				0269E571278C98D000E56295 /* CitiesWeathersListVC.swift */,
+				021A279027A7CF8C00EF4F48 /* Controllers */,
 				02AA350727995E86009D5CE3 /* Model */,
 				0219ED36279C174F006C0B0C /* Extensions */,
 				0269E576278C98D400E56295 /* Assets.xcassets */,
 				0269E578278C98D400E56295 /* LaunchScreen.storyboard */,
 				0269E57B278C98D400E56295 /* Info.plist */,
-				02975118279C26F0000938F2 /* NetworkController.swift */,
-				0219ED2F279B229F006C0B0C /* HomeScreenVC.swift */,
-				02AA350C27995EFA009D5CE3 /* WeatherCell.swift */,
 				0219ED3C279C185C006C0B0C /* Cell */,
-				022FDBEC279F0E740090B89E /* LocationManager.swift */,
+				021A279127A7D00100EF4F48 /* Managers */,
 			);
 			path = TodayWeather;
 			sourceTree = "<group>";
