@@ -27,47 +27,19 @@ class CitiesWeathersListVC: UIViewController, UITableViewDelegate, UITableViewDa
         view.backgroundColor = .white
         navigationItem.title = "Weather App"
         convigureViewsLayout()
-        
-        
-        
-//        NetworkController.shared.fetchWeather(cityName: cityLocation) { (result) in
-//            switch result{
-//            case .success(let weeklyWeather):
-//                DispatchQueue.main.async {
-//                    self.updateUI(weeklyTemperature: weeklyWeather)
-//                }
-//            case .failure(let error):
-//                self.displayError(error: error, title: "Please check you network connection.")
-//            }
-//        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-           super.viewWillAppear(animated)
         configureTableView()
         
-        var activityIndicatorView = UIActivityIndicatorView()
-        tableView.backgroundView = activityIndicatorView
-        activityIndicatorView.startAnimating()
-        
-            OperationQueue.main.addOperation() {
-                activityIndicatorView.stopAnimating()
-                NetworkController.shared.fetchWeather(cityName: self.cityLocation) { (result) in
-                    switch result{
-                    case .success(let weeklyWeather):
-                        DispatchQueue.main.async {
-                            self.updateUI(weeklyTemperature: weeklyWeather)
-                        }
-                    case .failure(let error):
-                        self.displayError(error: error, title: "Please check you network connection.")
-                    }
+        NetworkController.shared.fetchWeather(cityName: cityLocation) { (result) in
+            switch result{
+            case .success(let weeklyWeather):
+                DispatchQueue.main.async {
+                    self.updateUI(weeklyTemperature: weeklyWeather)
                 }
-                       
-
-                self.tableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
-                       self.tableView.reloadData()
-                   }
-           }
+            case .failure(let error):
+                self.displayError(error: error, title: "Please check you network connection.")
+            }
+        }
+    }
     
     
     func updateUI(weeklyTemperature: [WeeklyWeather]){
