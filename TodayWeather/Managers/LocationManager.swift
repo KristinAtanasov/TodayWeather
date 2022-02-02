@@ -31,7 +31,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             }
             completion(name)
         }
-       
+        
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

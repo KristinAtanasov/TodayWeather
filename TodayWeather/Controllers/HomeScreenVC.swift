@@ -27,12 +27,11 @@ class HomeScreenVC: UIViewController {
     }()
     var weeklyTemperature = [WeeklyWeather]()
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.backBarButtonItem?.tintColor = .blue
         settingViewConstraints()
         
         LocationManager.shared.getUserLocation { [weak self] location in
@@ -43,34 +42,6 @@ class HomeScreenVC: UIViewController {
         }
     }
 
- 
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//                NetworkController.shared.fetchWeather(cityName: "Cupertino") { (result) in
-//                    switch result{
-//                    case .success(let weeklyWeather):
-//                        self.updateUI(weeklyTemperature: weeklyWeather)
-//                    case .failure(let error):
-//                        self.displayError(error: error, title: "Please check you network connection.")
-//                    }
-//                }
-//                print("checking \(weeklyTemperature.description)")
-//    }
-    
-    func updateUI(weeklyTemperature: [WeeklyWeather]){
-        DispatchQueue.main.async {
-            self.weeklyTemperature = weeklyTemperature
-            //self.tableView.reloadData()
-        }
-    }
-    
-    func displayError(error: Error, title: String){
-        DispatchQueue.main.async {
-            let alert = UIAlertController(title: title, message: error.localizedDescription, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
     
     func addCityName(location: CLLocation){
         LocationManager.shared.resolveLocationName(with: location) {[weak self] locationName in
@@ -83,5 +54,6 @@ class HomeScreenVC: UIViewController {
         let weatherCitiesListVC = CitiesWeathersListVC()
         weatherCitiesListVC.cityLocation = self.title!
         navigationController?.pushViewController(weatherCitiesListVC, animated: true)
+        navigationController?.modalPresentationStyle = .fullScreen
     }
 }

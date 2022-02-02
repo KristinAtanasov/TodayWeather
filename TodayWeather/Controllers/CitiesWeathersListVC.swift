@@ -19,9 +19,9 @@ class CitiesWeathersListVC: UIViewController, UITableViewDelegate, UITableViewDa
     
     var cityLocation = ""
     var weeklyTemperature = [WeeklyWeather]()
-    var spinerView = UIActivityIndicatorView(style: .large)
+    var tempToString = ""
     
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -41,7 +41,6 @@ class CitiesWeathersListVC: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-    
     func updateUI(weeklyTemperature: [WeeklyWeather]){
         DispatchQueue.main.async {
             self.weeklyTemperature = weeklyTemperature
@@ -57,23 +56,6 @@ class CitiesWeathersListVC: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-//    func showSpinner(){
-//        view.backgroundColor = UIColor(white: 0, alpha: 0.7)
-//
-//        spinerView.translatesAutoresizingMaskIntoConstraints = false
-//        spinerView.startAnimating()
-//        view.addSubview(spinerView)
-//
-//        spinerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-//        spinerView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-//    }
-//    func removeSpinner(){
-//        spinerView.removeFromSuperview()
-//    }
-}
-
-extension CitiesWeathersListVC{
-    //MARK: - TableView Datasourse and Delegate methods
     private func configureTableView(){
         
         tableView.delegate = self
@@ -81,54 +63,6 @@ extension CitiesWeathersListVC{
         tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
         tableView.register(WeatherCell.self, forCellReuseIdentifier: cellIdentifier)
     }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return weeklyTemperature.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! WeatherCell
-        
-        var weatherModel = weeklyTemperature[indexPath.row]
-        
-        configureCellColors(cell: cell)
-        
-        cell.gradusLabel.text = String("\(weatherModel.temp) °")
-        cell.weekDayLabel.text = weatherModel.dayOfTheWeek
-        cell.cellImageView.image = UIImage(named: weatherModel.icon)
-        cell.titleLabel.text = weatherModel.conditions
-        cell.cityNameLabel.text = cityLocation
-        
-        return cell
-    }
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath)
-        
-        UIView.animate(withDuration: 0.5,
-                       animations: {
-                        //Fade-out
-                        cell?.alpha = 0.5
-                       }) { (completed) in
-            UIView.animate(withDuration: 0.5,
-                           animations: {
-                            //Fade-out
-                            cell?.alpha = 1
-                           })
-        }
-    }
-    func configureCellColors(cell: UITableViewCell) -> UITableViewCell{
-        cell.layer.borderWidth = 3
-        cell.layer.borderColor = CGColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
-        cell.selectionStyle = .none
-        return cell
-    }
+
 }
 
